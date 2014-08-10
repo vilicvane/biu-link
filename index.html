@@ -8,8 +8,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
     <title>Biu!</title>
     <style>
+        html {
+            -ms-touch-action: none;
+            touch-action: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             background-color: #0080FF;
             font-family: 'Segoe UI', sans-serif;
@@ -47,10 +59,13 @@
 
         #fork {
             position: absolute;
-            left: 50%; bottom: 0px;
+            left: 50%;
+            bottom: 0px;
             margin: 0px -70px;
-            width: 140px; line-height: 30px;
-            text-align: center; color: #fff;
+            width: 140px;
+            line-height: 30px;
+            text-align: center;
+            color: #fff;
             text-decoration: none;
             background-color: rgba(255,255,255,0.2);
             opacity: 0.5;
