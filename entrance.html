@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Biu!</title>
+    <style>
+        body {
+            background-color: #0080FF;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 12px; color: #fff;
+        }
+
+        #wrapper {
+            position: absolute;
+            left: 50%; top: 50%;
+            margin: -140px -120px -100px -120px;
+            width: 240px; height: 240px;
+        }
+
+        #logo-wrapper p {
+            margin: 0px;
+            padding: 0px;
+            text-align: center;
+        }
+        
+        #logo-wrapper p b {
+            font-weight: normal;
+            opacity: 0.5;
+        }
+
+        h1 {
+            margin: 0px; padding: 0px;
+            height: 100px;
+            font-size: 0px;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAABkBAMAAACm+cXiAAAAHlBMVEX///////////////////////////////////////8V2MxSAAAACXRSTlMAAQofKURITID+ZKlxAAAA40lEQVR4XuzWvQ2AMBCDUcRPnxEYgYIBkGCIGyNMkVuBbUGhuBrZggJ7gE+vyqX5cNqwUzJWEgPjzuCYe0kMTHAgTHAQTHDQDM6x33DEEUeczOHkdx9T/Glv5+3aOoKHpjvqJvDs9XdmgY5wZLAvQWQeTBllzvbr6ARAGAYCaDAO4gj9cICC0kmylNtaaCHgQRAKInr300CP91doOmP7JdvS3pvPbaon9JzBJBHFOSn0YibXO5wz9PN7GStDjF+TIUOGDBkyZMg89TGxMvpN8nySIUNGby1CcU989YrXsrD3tzAn5BjVBDhAuwEAAAAASUVORK5CYII=') /*images/logo.png*/ no-repeat center;
+        }
+
+        input[type=text] {
+            margin: 0px; padding: 7px 10px;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            color: #fff;
+            line-height: 16px; height: 30px;
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        input:-ms-input-placeholder {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+        input:-moz-placeholder {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+        input::-moz-placeholder {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+        input::-webkit-input-placeholder {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        #shorter-wrapper {
+            position: absolute;
+            left: 0px; right: 0px; bottom: 0px;
+        }
+
+        #target-url {
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        #target-url:focus {
+            color: #fff;
+        }
+
+        #biu-url {
+            width: 160px;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            transition: all linear 0.2s;
+        }
+
+        #biu-url:focus {
+            color: #fff;
+        }
+
+        #shorter-wrapper button {
+            margin: 0px;
+            padding: 0px;
+            width: 80px;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            line-height: 30px;
+            outline: none;
+            cursor: pointer;
+            background-color: rgba(255,255,255,0.1);
+            transition: all linear 0.2s;
+        }
+
+        #shorter-wrapper button:hover {
+            color: #fff;
+            background-color: rgba(255,255,255,0.08);
+        }
+
+        #shorter-wrapper button[disabled] {
+            color: rgba(255,255,255,0.5);
+            cursor: default;
+        }
+
+        #info-wrapper {
+            position: absolute;
+            box-sizing: border-box;
+            margin-top: 10px;
+            top: 250px;
+            padding: 10px 12px;
+            width: 100%;
+            background-color: #8c0;
+            opacity: 0;
+            transition: margin ease-out 0.1s, opacity linear 0.1s;
+        }
+
+        #info-wrapper.show {
+            margin-top: 0px;
+            opacity: 1;
+            transition: margin ease-out 0.1s, opacity linear 0.1s, background-color linear 0.05s, color linear 0.05s;
+        }
+
+        #info-wrapper.yellow {
+            background-color: #fb0;
+        }
+
+        #fork {
+            position: fixed;
+            left: 50%; bottom: 0px;
+            margin: 0px -70px;
+            width: 140px; line-height: 30px;
+            text-align: center; color: #fff;
+            text-decoration: none;
+            background-color: rgba(255,255,255,0.2);
+            opacity: 0.5;
+            transition: opacity linear 0.2s;
+        }
+
+        #fork:hover {
+            opacity: 1;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="logo-wrapper">
+            <h1>biu</h1>
+            <p>your <b>private</b> url shorter</p>
+        </div>
+        <div id="shorter-wrapper">
+            <input id="target-url" type="text" spellcheck="false" placeholder="paste url here" />
+            <input id="biu-url" type="text" spellcheck="false" /><button>short it</button>
+        </div>
+        <div id="info-wrapper"></div>
+    </div>
+    <a id="fork" href="https://github.com/vilic/biu">fork biu on github</a>
+    <script>
+        var showInfo;
+
+        (function () {
+            var $wrapper = $('#info-wrapper');
+            var timer;
+            showInfo = function (text, isYellow, timeout) {
+                timeout = timeout || 2000;
+                $wrapper.text(text);
+                $wrapper.addClass('show');
+                $wrapper.toggleClass('yellow', !!isYellow);
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    $wrapper.removeClass('show');
+                }, timeout);
+            };
+        })();
+
+        var baseUrl = window.location.href.match(/^\w+:\/\/[^/]+\//)[0];
+
+        var $targetUrl = $('#target-url');
+        var $biuUrl = $('#biu-url');
+        var $button = $('#shorter-wrapper button');
+
+        var lastUrlsPair = {
+            target: null,
+            biu: null
+        };
+
+        $biuUrl.attr('placeholder', baseUrl + '...');
+
+        $('#target-url, #biu-url').mousedown(function (e) {
+            if (document.activeElement != this) {
+                e.preventDefault();
+                this.focus();
+            }
+        }).focus(function () {
+            this.select();
+        });
+
+        $biuUrl.focus(function () {
+            var targetUrl = $targetUrl.val().trim();
+            var biuUrl = $biuUrl.val().trim();
+
+            if (targetUrl == lastUrlsPair.target && biuUrl == lastUrlsPair.biu) {
+                $button.text('ctrl + c').attr('disabled', true);
+            }
+        }).on('blur input paste', function () {
+            $button.text('short it').attr('disabled', false);
+        });
+
+        $button.click(function (e) {
+            var targetUrl = $targetUrl.val().trim();
+            if (!targetUrl) {
+                showInfo('please enter the url to be shorten.', true);
+                return;
+            }
+
+            if (/ /.test(targetUrl)) {
+                showInfo('please enter a valid url.', true);
+                return;
+            }
+
+            if (!/^\w+:\/\//.test(targetUrl)) {
+                targetUrl = 'http://' + targetUrl;
+                $targetUrl.val(targetUrl);
+            }
+
+            var biuUrl = $biuUrl.val().trim();
+
+            if (targetUrl == lastUrlsPair.target && biuUrl == lastUrlsPair.biu) {
+                $biuUrl.focus();
+                return;
+            }
+
+            var path = biuUrl.replace(/^\w+:\/\/[^/]+\//, '');
+
+            var $this = $(this);
+            $this.attr('disabled', true);
+
+            $.ajax('', {
+                method: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    type: 'add',
+                    path: path,
+                    url: targetUrl,
+                    force: e.metaKey || e.ctrlKey
+                })
+            }).done(function (data) {
+                if (data.error) {
+                    showInfo(data.error.message + ' (error code ' + data.error.code + ').', true);
+                    $this.attr('disabled', false);
+                    return;
+                }
+
+                var biuUrl = baseUrl + data.path;
+
+                lastUrlsPair.target = targetUrl;
+                lastUrlsPair.biu = biuUrl;
+
+                $biuUrl.val(biuUrl).focus();
+
+                showInfo('biu! here it is!');
+            }).fail(function () {
+                showInfo('unknown error occurred.', true);
+                $this.attr('disabled', false);
+            });
+        });
+    </script>
+</body>
+</html>

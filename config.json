@@ -1,5 +1,7 @@
 ﻿{
-    "links-file": "links.txt",
-    "port": null,
-    "entrance": "/"
+	"links-file": "links.txt",
+	"url-regex": "^\\w+:\\S+$",
+	"path-regex": ".",
+	"entrance": "/",
+	"port": null
 }
