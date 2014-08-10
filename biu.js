@@ -9,6 +9,11 @@ var app = express();
 
 app.use(bodyParseer.json());
 
+var staticFiles = [
+    'robots.txt',
+    'favicon.ico'
+];
+
 var config = require('./config.json');
 
 var linksFile = config['links-file'] || 'links.txt';
@@ -156,7 +161,7 @@ function nextPath() {
 
 function isPathAvailable(path, ignoreExists) {
     if (typeof ignoreExists === "undefined") { ignoreExists = false; }
-    return !(path == entrancePath || path == 'robots.txt' || (!ignoreExists && hop.call(linksMap, path)));
+    return !(path == entrancePath || staticFiles.indexOf(path) >= 0 || (!ignoreExists && hop.call(linksMap, path)));
 }
 
 function isPathValid(path) {
@@ -260,7 +265,9 @@ app.get('/robots.txt', function (req, res) {
 app.get(/^\/(.+)/, function (req, res) {
     var path = req.params[0];
 
-    if (hop.call(linksMap, path)) {
+    if (staticFiles.indexOf(path) >= 0) {
+        res.sendFile(__dirname + '/' + path);
+    } else if (hop.call(linksMap, path)) {
         res.redirect(linksMap[path]);
     } else {
         res.redirect('/');

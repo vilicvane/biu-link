@@ -206,6 +206,12 @@
             this.select();
         });
 
+        $targetUrl.keypress(function (e) {
+            if (e.keyCode == 13) {
+                $button.click();
+            }
+        })
+
         $biuUrl.focus(function () {
             var targetUrl = $targetUrl.val().trim();
             var biuUrl = $biuUrl.val().trim();
