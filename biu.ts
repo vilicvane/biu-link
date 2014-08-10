@@ -251,8 +251,6 @@ var apisMap: IStringsMap<express.RequestHandler> = {
     }
 };
 
-console.log('entrance', entrance);
-
 app.all(entrance, (req, res, next) => {
     var type: string = req.body.type;
 
@@ -271,10 +269,6 @@ if (entrancePath) {
         res.sendFile(__dirname + '/index.html');
     });
 }
-
-app.get('/robots.txt', (req, res) => {
-    res.sendFile(__dirname + '/robots.txt');
-});
 
 app.get(/^\/(.+)/, (req, res) => {
     var path: string = req.params[0];

@@ -238,8 +238,6 @@ var apisMap = {
     }
 };
 
-console.log('entrance', entrance);
-
 app.all(entrance, function (req, res, next) {
     var type = req.body.type;
 
@@ -257,10 +255,6 @@ if (entrancePath) {
         res.sendFile(__dirname + '/index.html');
     });
 }
-
-app.get('/robots.txt', function (req, res) {
-    res.sendFile(__dirname + '/robots.txt');
-});
 
 app.get(/^\/(.+)/, function (req, res) {
     var path = req.params[0];
