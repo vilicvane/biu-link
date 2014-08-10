@@ -1,0 +1,23 @@
+{
+  "name": "biu",
+  "version": "0.1.0",
+  "description": "A simple URL shorter.",
+  "main": "biu.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vilic/biu.git"
+  },
+  "author": "VILIC VANE",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vilic/biu/issues"
+  },
+  "homepage": "https://github.com/vilic/biu",
+  "dependencies": {
+    "body-parser": "^1.6.2",
+    "express": "^4.8.2"
+  }
+}

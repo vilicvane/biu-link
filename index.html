@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<!--
+    Biu v0.1
+    https://github.com/vilic/biu
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Biu!</title>
+    <style>
+        body {
+            background-color: #0080FF;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        #wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -100px -120px -80px -120px;
+            width: 240px;
+            height: 180px;
+        }
+
+        #logo-wrapper p {
+            margin: 0px;
+            padding: 0px;
+            text-align: center;
+        }
+
+        #logo-wrapper p b {
+            font-weight: normal;
+            opacity: 0.5;
+        }
+
+        h1 {
+            margin: 0px;
+            padding: 0px;
+            height: 100px;
+            font-size: 0px;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAABkBAMAAACm+cXiAAAAHlBMVEX///////////////////////////////////////8V2MxSAAAACXRSTlMAAQofKURITID+ZKlxAAAA40lEQVR4XuzWvQ2AMBCDUcRPnxEYgYIBkGCIGyNMkVuBbUGhuBrZggJ7gE+vyqX5cNqwUzJWEgPjzuCYe0kMTHAgTHAQTHDQDM6x33DEEUeczOHkdx9T/Glv5+3aOoKHpjvqJvDs9XdmgY5wZLAvQWQeTBllzvbr6ARAGAYCaDAO4gj9cICC0kmylNtaaCHgQRAKInr300CP91doOmP7JdvS3pvPbaon9JzBJBHFOSn0YibXO5wz9PN7GStDjF+TIUOGDBkyZMg89TGxMvpN8nySIUNGby1CcU989YrXsrD3tzAn5BjVBDhAuwEAAAAASUVORK5CYII=') /*images/logo.png*/ no-repeat center;
+        }
+
+        #fork {
+            position: absolute;
+            left: 50%; bottom: 0px;
+            margin: 0px -70px;
+            width: 140px; line-height: 30px;
+            text-align: center; color: #fff;
+            text-decoration: none;
+            background-color: rgba(255,255,255,0.2);
+            opacity: 0.5;
+            transition: opacity linear 0.2s;
+        }
+
+        #fork:hover {
+            opacity: 1;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="logo-wrapper">
+            <h1>biu</h1>
+            <p>somebody's <b>private</b> url shorter</p>
+        </div>
+        <a id="fork" href="https://github.com/vilic/biu">fork biu on github</a>
+    </div>
+</body>
+</html>
