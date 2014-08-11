@@ -8,6 +8,7 @@ var hop = Object.prototype.hasOwnProperty;
 var app = express();
 
 app.use(bodyParseer.json());
+app.use(bodyParseer.urlencoded());
 
 var staticFiles = [
     'robots.txt',
