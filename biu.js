@@ -29,7 +29,7 @@ if (!/^\//.test(entrance)) {
 var entrancePath = entrance.substr(1);
 
 var linksMap;
-var lastGeneratedPath = 'az';
+var lastGeneratedPath = '09';
 
 readLinks();
 
@@ -75,7 +75,7 @@ function readLinks() {
     }
 }
 
-var pathChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+var pathChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 var pathCharsFirstLower = 'a';
 var pathCharsFirstUpper = 'A';
 var pathNextCharsMap = {};
@@ -87,6 +87,7 @@ pathChars.forEach(function (chr, i) {
 function nextPath() {
     var lastPathChars = lastGeneratedPath.split('');
     var allLower = true;
+    var allNumber = true;
 
     var indexes = [];
 
@@ -123,11 +124,22 @@ function nextPath() {
             allLower = false;
         }
 
+        if (/\D/.test(chr)) {
+            allNumber = false;
+        }
+
         pathRawChars.push(chr);
     }
 
     if (carry) {
         pathRawChars.push(pathCharsFirstLower);
+        allNumber = false;
+    }
+
+    if (allNumber) {
+        pathRawChars[0] = pathCharsFirstLower;
+    } else if (allLower) {
+        pathRawChars[0] = pathCharsFirstUpper;
     }
 
     var pathChars = [];
@@ -142,10 +154,6 @@ function nextPath() {
         }
 
         pathChars[index] = pathRawChars[i];
-    }
-
-    if (allLower) {
-        pathChars[0] = pathCharsFirstUpper;
     }
 
     var path = pathChars.reverse().join('');

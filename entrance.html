@@ -163,7 +163,7 @@
             opacity: 1;
         }
     </style>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://code.jquery.com/jquery.min.js"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -222,7 +222,11 @@
             if (e.keyCode == 13) {
                 $button.click();
             }
-        })
+        }).on('input paste', function () {
+            if ($targetUrl.val().trim() != lastUrlsPair.target && $biuUrl.val().trim() == lastUrlsPair.biu) {
+                $biuUrl.val('');
+            }
+        });
 
         $biuUrl.focus(function () {
             var targetUrl = $targetUrl.val().trim();
@@ -252,11 +256,23 @@
                 $targetUrl.val(targetUrl);
             }
 
+            if (targetUrl == baseUrl || targetUrl + '/' == baseUrl) {
+                showInfo('biu!', true);
+                return;
+            }
+
             var biuUrl = $biuUrl.val().trim();
 
-            if (targetUrl == lastUrlsPair.target && biuUrl == lastUrlsPair.biu) {
-                $biuUrl.focus();
-                return;
+            if (targetUrl == lastUrlsPair.target) {
+                if (!biuUrl) {
+                    biuUrl = lastUrlsPair.biu;
+                    $biuUrl.val(biuUrl);
+                }
+
+                if (biuUrl == lastUrlsPair.biu) {
+                    $biuUrl.focus();
+                    return;
+                }
             }
 
             var path = biuUrl.replace(/^\w+:\/\/[^/]+\//, '');
