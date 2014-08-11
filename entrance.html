@@ -226,7 +226,7 @@
             if ($targetUrl.val().trim() != lastUrlsPair.target && $biuUrl.val().trim() == lastUrlsPair.biu) {
                 $biuUrl.val('');
             }
-        });
+        }).focus();
 
         $biuUrl.keypress(function (e) {
             if (e.keyCode == 13) {
