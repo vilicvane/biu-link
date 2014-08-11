@@ -2,6 +2,8 @@
 
 A simple URL shorter for NodeJS.
 
+As it's designed for private use, considering the links number won't be very large, Biu uses text file instead of a database to store links. And it will read all links data to memory when starts.
+
 Demo http://biu.link
 
 ![biu screenshot](/images/screenshot.png?raw=true)
@@ -45,10 +47,10 @@ Use POST method to invoke the API. Accepted Content-Type includes urlencoded (ap
 
 ### Request Parameters
 
-**type** should always be string "add".
-**url** the url to be shorten.
-**path** (optional) custom path.
-**force** (optional) if path is specified, true to ignore and overwrite if it already exists.
+**type** should always be string "add".  
+**url** the url to be shorten.  
+**path** (optional) custom path.  
+**force** (optional) if path is specified, true to ignore and overwrite if it already exists.  
 
 ### Response
 
