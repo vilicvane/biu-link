@@ -214,25 +214,22 @@
                 e.preventDefault();
                 this.focus();
             }
+        }).keypress(function (e) {
+            if (e.keyCode == 13) {
+                $(this).blur();
+                $button.click();
+            }
         }).focus(function () {
             this.select();
         });
 
-        $targetUrl.keypress(function (e) {
-            if (e.keyCode == 13) {
-                $button.click();
-            }
-        }).on('input paste', function () {
+        $targetUrl.on('input paste', function () {
             if ($targetUrl.val().trim() != lastUrlsPair.target && $biuUrl.val().trim() == lastUrlsPair.biu) {
                 $biuUrl.val('');
             }
         }).focus();
 
-        $biuUrl.keypress(function (e) {
-            if (e.keyCode == 13) {
-                $button.click();
-            }
-        }).focus(function () {
+        $biuUrl.focus(function () {
             var targetUrl = $targetUrl.val().trim();
             var biuUrl = $biuUrl.val().trim();
 
@@ -265,9 +262,15 @@
                 return;
             }
 
-            var biuUrl = baseUrl + $biuUrl.val().trim().replace(/^\w+:\/\/[^/]+\//, '');
+            var biuUrl = $biuUrl.val().trim().replace(/^\w+:\/\/[^/]+\//, '');
 
-            $biuUrl.val(biuUrl);
+            if (biuUrl) {
+                biuUrl = baseUrl + biuUrl;
+
+                if ($biuUrl.val() != biuUrl) {
+                    $biuUrl.val(biuUrl);
+                }
+            }
 
             if (targetUrl == lastUrlsPair.target) {
                 if (!biuUrl) {
@@ -284,8 +287,8 @@
             var path = biuUrl.replace(/^\w+:\/\/[^/]+\//, '');
 
             var $this = $(this);
-            $this.attr('disabled', true);
-
+            $this.attr('disabled', true).text('biu-ing');
+            
             $.ajax('', {
                 method: 'post',
                 contentType: 'application/json',
@@ -298,7 +301,20 @@
             }).done(function (data) {
                 if (data.error) {
                     showInfo(data.error.message + ' (error code ' + data.error.code + ').', true);
-                    $this.attr('disabled', false);
+                    $this.attr('disabled', false).text('short it');
+
+                    var errorCat = Math.floor(data.error.code / 10);
+
+                    switch (errorCat) {
+                        case 101:
+                            $targetUrl.focus();
+                            break;
+                        case 102:
+                            $biuUrl.focus();
+                        default:
+                            break;
+                    }
+
                     return;
                 }
 
@@ -312,8 +328,9 @@
                 showInfo('biu! here it is!');
             }).fail(function () {
                 showInfo('unknown error occurred.', true);
-                $this.attr('disabled', false);
+                $this.attr('disabled', false).text('short it');
             });
+
         });
     </script>
 </body>
