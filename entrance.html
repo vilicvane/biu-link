@@ -228,7 +228,11 @@
             }
         });
 
-        $biuUrl.focus(function () {
+        $biuUrl.keypress(function (e) {
+            if (e.keyCode == 13) {
+                $button.click();
+            }
+        }).focus(function () {
             var targetUrl = $targetUrl.val().trim();
             var biuUrl = $biuUrl.val().trim();
 
@@ -261,7 +265,9 @@
                 return;
             }
 
-            var biuUrl = $biuUrl.val().trim();
+            var biuUrl = baseUrl + $biuUrl.val().trim().replace(/^\w+:\/\/[^/]+\//, '');
+
+            $biuUrl.val(biuUrl);
 
             if (targetUrl == lastUrlsPair.target) {
                 if (!biuUrl) {
