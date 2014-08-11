@@ -244,11 +244,13 @@
             var targetUrl = $targetUrl.val().trim();
             if (!targetUrl) {
                 showInfo('please enter the url to be shorten.', true);
+                $targetUrl.focus();
                 return;
             }
 
             if (/ /.test(targetUrl)) {
                 showInfo('please enter a valid url.', true);
+                $targetUrl.focus();
                 return;
             }
 
@@ -259,6 +261,7 @@
 
             if (targetUrl.indexOf(baseUrl) == 0 || targetUrl + '/' == baseUrl) {
                 showInfo('biu!', true);
+                $targetUrl.focus();
                 return;
             }
 
