@@ -257,7 +257,7 @@
                 $targetUrl.val(targetUrl);
             }
 
-            if (targetUrl == baseUrl || targetUrl + '/' == baseUrl) {
+            if (targetUrl.indexOf(baseUrl) == 0 || targetUrl + '/' == baseUrl) {
                 showInfo('biu!', true);
                 return;
             }
