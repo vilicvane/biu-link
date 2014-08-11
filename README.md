@@ -1,8 +1,10 @@
 ﻿# Biu v0.1
 
-A simple URL shorter for NodeJS.
+Pronounces "be-yo", the sound that old-fashioned laser gun in films would make. The slash above "i" means the 4th tone of [Pinyin](http://biu.link/pinyin-tones).
 
-As it's designed for private use, considering the links number won't be very large, Biu uses text file instead of a database to store links. And it will read all links data to memory when starts.
+It's a simple URL shorter for NodeJS.
+
+As it's designed for private use, considering the links number won't be very large, Biu uses **TEXT FILE** instead of a database to store links. And it will read all links data to memory when starts.
 
 Demo http://biu.link
 
