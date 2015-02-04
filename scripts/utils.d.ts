@@ -1,3 +1,3 @@
-﻿interface IStringsMap<T> {
+﻿interface IDictionary<T> {
     [key: string]: T;
 }

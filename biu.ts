@@ -1,7 +1,7 @@
 ﻿import fs = require('fs');
 
 import express = require('express');
-import bodyParseer = require('body-parser');
+import bodyParser = require('body-parser');
 
 var hop: {
     call(thisArg: any, property: string): boolean;
@@ -9,25 +9,34 @@ var hop: {
 
 var app = express();
 
-app.use(bodyParseer.json());
-app.use(bodyParseer.urlencoded());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false    
+}));
 
 var staticFiles = [
     'robots.txt',
     'favicon.ico'
 ];
 
-var config: {
-    "links-file": string;
-    "url-regex": string;
-    "path-regex": string;
-    "entrance": string;
-    "port": number;
-} = require('./config.json');
+var staticFileHash: IDictionary<void> = {};
+staticFiles.forEach(file => staticFileHash[file] = null);
 
-var linksFile = config['links-file'] || 'links.txt';
-var urlRegex = new RegExp(config['url-regex'] || '^\\w+:\\S+$');
-var pathRegex = new RegExp(config['path-regex'] || '.');
+interface IConfig {
+    linksFile: string;
+    urlRegex: string;
+    pathRegex: string;
+    entrance: string;
+    redirect: string;
+    port: number;    
+}
+
+var config: IConfig = require('./config.json');
+
+var linksFile = config.linksFile || 'links.txt';
+var urlRegex = new RegExp(config.urlRegex || '^\\w+:\\S+$');
+var pathRegex = new RegExp(config.pathRegex || '.');
+var redirect = config.redirect;
 
 var entrance = config.entrance || '/';
 
@@ -37,7 +46,7 @@ if (!/^\//.test(entrance)) {
 
 var entrancePath = entrance.substr(1);
 
-var linksMap: IStringsMap<string>;
+var linksMap: IDictionary<string>;
 var lastGeneratedPath = '09';
 
 readLinks();
@@ -69,8 +78,7 @@ function readLinks() {
             }
 
             linksMap[groups[2]] = groups[3];
-        }
-        else {
+        } else {
             console.error('corrupted link information in line ' + (lineNumber + 1));
         }
     });
@@ -88,7 +96,7 @@ function readLinks() {
 var pathChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 var pathCharsFirstLower = 'a';
 var pathCharsFirstUpper = 'A';
-var pathNextCharsMap: IStringsMap<string> = {};
+var pathNextCharsMap: IDictionary<string> = {};
 
 pathChars.forEach((chr, i) => {
     pathNextCharsMap[chr] = pathChars[i + 1];
@@ -115,8 +123,7 @@ function nextPath() {
     for (var i = 0; i < length; i++) {
         if (i < halfLength) {
             index = i * 2;
-        }
-        else {
+        } else {
             index = (i - halfLength) * 2 + 1;
         }
 
@@ -126,8 +133,7 @@ function nextPath() {
             chr = pathNextCharsMap[chr];
             if (chr) {
                 carry = false;
-            }
-            else {
+            } else {
                 chr = pathCharsFirstLower;
             }
         }
@@ -150,8 +156,7 @@ function nextPath() {
 
     if (allNumber) {
         pathRawChars[0] = pathCharsFirstLower;
-    }
-    else if (allLower) {
+    } else if (allLower) {
         pathRawChars[0] = pathCharsFirstUpper;
     }
 
@@ -162,8 +167,7 @@ function nextPath() {
     for (var i = 0; i < length; i++) {
         if (i < halfLength) {
             index = i * 2;
-        }
-        else {
+        } else {
             index = (i - halfLength) * 2 + 1;
         }
 
@@ -176,8 +180,7 @@ function nextPath() {
 
     if (!isPathAvailable(path)) {
         return nextPath();
-    }
-    else {
+    } else {
         return path;
     }
 }
@@ -190,7 +193,7 @@ function isPathValid(path: string) {
     return pathRegex.test(path) && encodeURIComponent(path) == path;
 }
 
-var apisMap: IStringsMap<express.RequestHandler> = {
+var apisMap: IDictionary<express.RequestHandler> = {
     "add": (req: express.Request, res: express.Response) => {
         var path: string = req.body.path;
         var url: string = req.body.url;
@@ -240,8 +243,7 @@ var apisMap: IStringsMap<express.RequestHandler> = {
             }
 
             prefix = '=';
-        }
-        else {
+        } else {
             path = nextPath();
             prefix = '';
         }
@@ -268,8 +270,7 @@ app.all(entrance, (req, res, next) => {
 
     if (type && hop.call(apisMap, type)) {
         apisMap[type](req, res, next);
-    }
-    else {
+    } else {
         res.sendFile(__dirname + '/entrance.html');
     }
 });
@@ -283,18 +284,18 @@ if (entrancePath) {
 app.get(/^\/(.+)/, (req, res) => {
     var path: string = req.params[0];
 
-    if (staticFiles.indexOf(path) >= 0) {
+    if (hop.call(staticFileHash, path)) {
         res.sendFile(__dirname + '/' + path);
-    }
-    else if (hop.call(linksMap, path)) {
+    } else if (hop.call(linksMap, path)) {
         res.redirect(linksMap[path]);
-    }
-    else {
+    } else if (redirect) {
+        res.redirect(redirect + path);
+    } else {
         res.redirect('/');
     }
 });
 
-var port = config.port || process.env.PORT || 80;
+var port = config.port || process.env.PORT || 1337;
 app.listen(port);
 
 console.log('biu has started.');

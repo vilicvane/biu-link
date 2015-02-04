@@ -1,18 +1,23 @@
 var fs = require('fs');
 var express = require('express');
-var bodyParseer = require('body-parser');
+var bodyParser = require('body-parser');
 var hop = Object.prototype.hasOwnProperty;
 var app = express();
-app.use(bodyParseer.json());
-app.use(bodyParseer.urlencoded());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 var staticFiles = [
     'robots.txt',
     'favicon.ico'
 ];
+var staticFileHash = {};
+staticFiles.forEach(function (file) { return staticFileHash[file] = null; });
 var config = require('./config.json');
-var linksFile = config['links-file'] || 'links.txt';
-var urlRegex = new RegExp(config['url-regex'] || '^\\w+:\\S+$');
-var pathRegex = new RegExp(config['path-regex'] || '.');
+var linksFile = config.linksFile || 'links.txt';
+var urlRegex = new RegExp(config.urlRegex || '^\\w+:\\S+$');
+var pathRegex = new RegExp(config.pathRegex || '.');
+var redirect = config.redirect;
 var entrance = config.entrance || '/';
 if (!/^\//.test(entrance)) {
     entrance = '/' + entrance;
@@ -214,17 +219,20 @@ if (entrancePath) {
 }
 app.get(/^\/(.+)/, function (req, res) {
     var path = req.params[0];
-    if (staticFiles.indexOf(path) >= 0) {
+    if (hop.call(staticFileHash, path)) {
         res.sendFile(__dirname + '/' + path);
     }
     else if (hop.call(linksMap, path)) {
         res.redirect(linksMap[path]);
     }
+    else if (redirect) {
+        res.redirect(redirect + path);
+    }
     else {
         res.redirect('/');
     }
 });
-var port = config.port || process.env.PORT || 80;
+var port = config.port || process.env.PORT || 1337;
 app.listen(port);
 console.log('biu has started.');
 console.log('listening to port ' + port);
