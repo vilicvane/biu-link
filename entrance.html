@@ -75,7 +75,7 @@
             color: rgba(255,255,255,0.5);
         }
 
-        #shorter-wrapper {
+        #shortener-wrapper {
             position: absolute;
             left: 0; right: 0; bottom: 0;
         }
@@ -102,7 +102,7 @@
             color: #fff;
         }
 
-        #shorter-wrapper button {
+        #shortener-wrapper button {
             margin: 0;
             padding: 0;
             width: 80px;
@@ -115,12 +115,12 @@
             transition: all linear 0.2s;
         }
 
-        #shorter-wrapper button:hover {
+        #shortener-wrapper button:hover {
             color: #fff;
             background-color: rgba(255,255,255,0.08);
         }
 
-        #shorter-wrapper button[disabled] {
+        #shortener-wrapper button[disabled] {
             color: rgba(255,255,255,0.5);
             cursor: default;
         }
@@ -169,11 +169,11 @@
     <div id="wrapper">
         <div id="logo-wrapper">
             <h1>biu</h1>
-            <p>your <b>private</b> url shorter</p>
+            <p>your <b>private</b> url shortener</p>
         </div>
-        <div id="shorter-wrapper">
+        <div id="shortener-wrapper">
             <input id="target-url" type="text" spellcheck="false" placeholder="paste url here" />
-            <input id="biu-url" type="text" spellcheck="false" /><button>short it</button>
+            <input id="biu-url" type="text" spellcheck="false" /><button>shorten it</button>
         </div>
         <div id="info-wrapper"></div>
     </div>
@@ -200,7 +200,7 @@
 
         var $targetUrl = $('#target-url');
         var $biuUrl = $('#biu-url');
-        var $button = $('#shorter-wrapper button');
+        var $button = $('#shortener-wrapper button');
 
         var lastUrlsPair = {
             target: null,
@@ -237,13 +237,13 @@
                 $button.text('ctrl + c').attr('disabled', true);
             }
         }).on('blur input paste', function () {
-            $button.text('short it').attr('disabled', false);
+            $button.text('shorten it').attr('disabled', false);
         });
 
         $button.click(function (e) {
             var targetUrl = $targetUrl.val().trim();
             if (!targetUrl) {
-                showInfo('please enter the url to be shorten.', true);
+                showInfo('please enter the url to be shortened.', true);
                 $targetUrl.focus();
                 return;
             }
@@ -304,7 +304,7 @@
             }).done(function (data) {
                 if (data.error) {
                     showInfo(data.error.message + ' (error code ' + data.error.code + ').', true);
-                    $this.attr('disabled', false).text('short it');
+                    $this.attr('disabled', false).text('shorten it');
 
                     var errorCat = Math.floor(data.error.code / 10);
 
@@ -332,7 +332,7 @@
                 showInfo('biu! here it is!');
             }).fail(function () {
                 showInfo('unknown error occurred.', true);
-                $this.attr('disabled', false).text('short it');
+                $this.attr('disabled', false).text('shorten it');
             });
 
         });

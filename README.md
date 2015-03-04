@@ -2,7 +2,7 @@
 
 Pronounces "be-yo", the sound that old-fashioned laser gun in films would make. The slash above "i" means the 4th tone of [Pinyin](http://biu.link/pinyin-tones).
 
-It's a simple URL shorter for NodeJS.
+It's a simple URL shortener for NodeJS.
 
 As it's designed for private use, considering the links number won't be very large, Biu uses **TEXT FILE** instead of a database to store links. And it will read all links data to memory when starts.
 
@@ -11,7 +11,7 @@ Demo http://biu.link
 ![biu screenshot](/images/screenshot.png?raw=true)
 
 **Hint**  
-Click "short it" with meta/ctrl key to ignore existing path and overwrite it.
+Click "shorten it" with meta/ctrl key to ignore existing path and overwrite it.
 
 ## Configuration
 
@@ -25,7 +25,7 @@ config.json (the values below are defaults)
     // a regex (string form) that tests whether the url is valid
     "urlRegex": "^\\w+:\\S+$",
     
-    // a regex (string form) that tests whether the shorten path is valid
+    // a regex (string form) that tests whether the shortened path is valid
     "pathRegex": ".",
     
     // the entrance of this biu
@@ -54,7 +54,7 @@ Use POST method to invoke the API. Accepted Content-Type includes urlencoded (ap
 ### Request Parameters
 
 **type** should always be string "add".  
-**url** the url to be shorten.  
+**url** the url to be shortened.  
 **path** (optional) custom path.  
 **force** (optional) if path is specified, true to ignore and overwrite if it already exists.  
 
